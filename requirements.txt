@@ -1,0 +1,9 @@
+langchain
+langchain-core
+langgraph
+pandas
+numpy
+python-dotenv
+fastapi
+uvicorn
+langchain-google-genai
