@@ -11,6 +11,8 @@ from langchain.tools import tool
 # def get_sample_findings():
 #     return findings
 
+
+
 @tool
 def rank_by_severity(findings: dict, top_n: int = 5):
     
@@ -29,7 +31,17 @@ Inputs:
 Returns:
     Dictionary containing ranked findings."""
 
-    # findings = get_sample_findings()
+    print("=" * 50)
+
+    print(findings.keys())
+
+    print(findings["delivery_delays"][0])
+
+    print(findings["demand_anomalies"][0])
+
+    print(findings["region_risks"][0])
+
+    print("=" * 50)
 
     ranked_findings = {}
 
@@ -67,8 +79,10 @@ Returns:
         key=lambda x: x["Risk Score"],
         reverse=True
     )[:top_n]
+    
 
     return ranked_findings
+
 
 
 @tool
@@ -126,5 +140,7 @@ Returns:
         )
 
     return briefing
+
+
     
 

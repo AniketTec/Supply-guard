@@ -14,6 +14,8 @@ class AgentState(BaseModel):
 
     next_agent: str | None = None
 
+    dataset_path: str | None = None
+
 
 if __name__ == "__main__":
     

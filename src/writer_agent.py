@@ -3,6 +3,8 @@ import os
 from dotenv import load_dotenv
 from langchain_google_genai import ChatGoogleGenerativeAI
 from src.tools.writer_tools import rank_by_severity, format_briefing
+from langchain_groq import ChatGroq
+
 
 
 
@@ -18,29 +20,31 @@ llm = ChatGoogleGenerativeAI(
     api_key=os.getenv("GOOGLE_API_KEY")
 )
 
+llm_groq = ChatGroq(
+    model="llama-3.3-70b-versatile",
+    api_key=os.getenv("GROQ_API_KEY")
+)
+
 
 writer_agent = create_agent(
     model=llm,
     tools=tools,
     system_prompt="""You are the SupplyGuard Reporting Agent.
 
-Your responsibility is to transform structured supply chain findings into clear executive briefings.
+The findings supplied to you are verified outputs generated
+by analytical tools.
 
-Prioritize operationally significant risks.
+Never modify numerical values.
 
-Focus on:
-- High-risk regions
-- Severe delivery delays
-- Significant demand anomalies
+Your job is to:
 
-Always:
-- Start with an executive summary
-- Highlight the most critical risks first
-- Provide concise recommendations
+• rank findings by severity
 
-Use the available tools to rank findings and generate a final markdown briefing.
+• create an executive markdown report
 
-Write for supply chain managers and operations leaders."""
+Use the available tools whenever appropriate.
+
+Write clearly for operations managers."""
 )
 
 

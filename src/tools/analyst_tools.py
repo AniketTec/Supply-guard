@@ -191,7 +191,7 @@ demand drops, inventory planning issues, or forecasting risks.
                 "Date": str(row["order date (DateOrders)"].date()),
                 "Actual Quantity": int(row["Order Item Quantity"]),
                 "Expected Quantity": round(row["rolling_mean"], 2),
-                "demand change (%)": round(row["demand change"], 2),
+                "Demand Change (%)": round(row["demand change"], 2),
                 "Z Score": round(row["z_score"], 2),
                 "Anomaly Type": row["Anomaly Type"]
             }

@@ -3,10 +3,12 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 import os
 from dotenv import load_dotenv
 from langchain.agents import create_agent
+from langchain_groq import ChatGroq
 
 load_dotenv()
 
 google_api_key = os.getenv("GOOGLE_API_KEY")
+groq_api_key = os.getenv("GROQ_API_KEY")
 
 tools = [
     detect_delivery_delays,
@@ -18,76 +20,27 @@ llm = ChatGoogleGenerativeAI(
     model="gemini-3.1-flash-lite",
     api_key=google_api_key)
 
-
+llm_groq = ChatGroq(
+    model="llama-3.3-70b-versatile",
+    api_key=groq_api_key
+)
 
 analyst_agent = create_agent(
     model=llm,
     tools=tools,
     system_prompt="""You are the SupplyGuard Analyst Agent.
 
-Your job is to analyze supply chain risks using the available tools.
+Your responsibility is to analyze structured supply-chain findings.
 
-You MUST return ONLY valid JSON.
+The analysis tools have already produced verified numerical findings.
 
-Do NOT summarize.
-Do NOT explain.
-Do NOT add markdown.
+Do not recalculate any values.
 
-The JSON MUST follow this exact schema.
+Your task is to identify the most important operational risks,
+patterns and observations.
 
-{
-"delivery_delays": [
-{
-"Region": "",
-"Category": "",
-"Total Orders": 0,
-"Delayed Orders": 0,
-"Delay Rate": 0,
-"Average Delay": 0,
-"Severity Score": 0
-}
-],
-
-"demand_anomalies": [
-{
-"Product": "",
-"Date": "",
-"Actual Quantity": 0,
-"Expected Quantity": 0,
-"Demand Change (%)": 0,
-"Z Score": 0,
-"Anomaly Type": ""
-}
-],
-
-"region_risks": [
-{
-"Region": "",
-"Total Orders": 0,
-"Late Orders": 0,
-"Cancelled Orders": 0,
-"Late Rate": 0,
-"Cancellation Rate": 0,
-"Raw Risk Score": 0,
-"Risk Score": 0
-}
-]
-}
-
-IMPORTANT:
-
-Preserve every field name EXACTLY as written above.
-
-Do not rename fields.
-
-Do not convert spaces to underscores.
-
-Do not change capitalization.
-
-Do not add or remove fields.
-
-Return only the JSON object.
-
+Provide a concise operational summary that another agent can use
+to prepare an executive report.
 """
 )
 
